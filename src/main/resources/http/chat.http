@@ -1,0 +1,4 @@
+### Chatlist
+GET localhost:8080/api/v1/chat?page=1&size=100
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJiaWdtYW5nY29tQGdtYWlsLmNvbSIsInJvbGUiOiJST0xFX1VTRVIiLCJpZCI6ImYxYjkxMzFlLTI5ZmUtNGI5Yi05YWQ1LWIxMzkzOGY0NDA1OCIsImlhdCI6MTc0NTQ3MjQ0NSwiZXhwIjoxNzQ1NTU4ODQ1fQ.3Oiz7w2sebdrosdtxfh7hZaC7Ns8RdtGDSNzNU82lKc65xWYfO8inNGxwlHEs_bs8Cr88H_VYK5R6NF85ABftg

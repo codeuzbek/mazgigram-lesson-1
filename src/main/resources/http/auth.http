@@ -1,0 +1,32 @@
+### Resgistration
+POST localhost:8080/api/v1/auth/registration
+Content-Type: application/json
+Accept-Language: UZ
+
+{
+  "name": "Boburbek",
+  "surname": "Kattabekov",
+  "email": "123@gmail.com",
+  "password": "12345"
+}
+
+### Resgistration Verification
+GET http://localhost:8080/auth/registration/email-verification/eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4MyIsImlhdCI6MTczMzU2ODYzOSwiZXhwIjoxNzMzNTcyMjM5fQ.be8YQ4uDTyPaxaAZFlZbNKcsPoSWdvzjcdZI8ztV2NVH43VgRO5IHqIqdhj3gEBHlqfg4JCWxzMwWLk1U2q6mQ
+
+### Login
+POST localhost:8080/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "bigmangcom@gmail.com",
+  "password": "123456"
+}
+
+### Login as Admin
+POST localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "username": "adminjon@gmail.com",
+  "password": "123456"
+}

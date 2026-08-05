@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram-like Chat</title>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.0/dist/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="css/main-style.css">
+</head>
+<body>
+<!-- Sidebar with chat list -->
+<div class="main-container">
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div>MazgiGram</div>
+
+            <div class="display-flex position-relative">
+                <i class="padding-left-5 padding-right-5  hover-cursor fa-solid fa-gear"></i>
+            </div>
+        </div>
+
+        <div class="search-box">
+            <input type="text" class="search-input" placeholder="Search...">
+        </div>
+
+        <div class="chat-list" id="chatListContainerId">
+            <!-- Group chat example with unread messages -->
+            <div class="chat-item active">
+                <div class="chat-avatar">
+                    <img src="./img/brain.png" alt="Group">
+                </div>
+                <div class="chat-info">
+                    <div class="chat-name">BrainDevelopment</div>
+                    <div class="chat-last-message">Shahboz: Yangi loyiha haqida...</div>
+                </div>
+                <div class="chat-meta">
+                    <div class="chat-time">12:34</div>
+                    <div class="chat-unread">5</div>
+                </div>
+            </div>
+
+            <!-- Private chat example -->
+            <div class="chat-item">
+                <div class="chat-avatar">
+                    <img src="./img/user-def.jpg" alt="User">
+                </div>
+                <div class="chat-info">
+                    <div class="chat-name">Ali Aliyev</div>
+                    <div class="chat-last-message">Bugun brainga boraman ...</div>
+                </div>
+                <div class="chat-meta">
+                    <div class="chat-time">11:20</div>
+                    <div class="chat-unread">2</div>
+                </div>
+            </div>
+
+            <!-- Another group example -->
+            <div class="chat-item">
+                <div class="chat-avatar">
+                    <img src="./img/code_uz_logo.jpg" alt="Group">
+                </div>
+                <div class="chat-info">
+                    <div class="chat-name">CodeUz</div>
+                    <div class="chat-last-message">Yangi kurslar haqida...</div>
+                </div>
+                <div class="chat-meta">
+                    <div class="chat-time">10:45</div>
+                </div>
+            </div>
+
+            <!-- Private chat without unread messages -->
+            <div class="chat-item">
+                <div class="chat-avatar">
+                    <img src="./img/user-def.jpg" alt="User">
+                </div>
+                <div class="chat-info">
+                    <div class="chat-name">Toshmat Toshmatov</div>
+                    <div class="chat-last-message">login parollar ishlamayapti</div>
+                </div>
+                <div class="chat-meta">
+                    <div class="chat-time">Yesterday</div>
+                </div>
+            </div>
+
+            <!-- Another group example -->
+            <div class="chat-item">
+                <div class="chat-avatar">
+                    <img src="./img/user-groups.png" alt="Group">
+                </div>
+                <div class="chat-info">
+                    <div class="chat-name">CodeUz</div>
+                    <div class="chat-last-message">Yangi kurslar haqida...</div>
+                </div>
+                <div class="chat-meta">
+                    <div class="chat-time">10:45</div>
+                </div>
+            </div>
+
+            <!-- More chat items can be added here -->
+        </div>
+    </div>
+
+    <!-- Main chat area -->
+    <div class="chat-container">
+        <div class="chat-header">
+            <div class="display-flex gap-10">
+                <div class="chat-title" id="chatNameDivId">Dasturchilar guruhi</div>
+                <div id="typingIndicatorId" class="typing-indicator" style="display: none;">
+                    <span class="typing-user" id="typingUserSpanId">Toshmat is typing</span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
+            </div>
+            <div class="chat-status" id="chatOnlineMembersCountDivId">5 members, online</div>
+        </div>
+
+        <div class="chat-messages" id="chatMessageContainerId">
+            <!-- Sent message with file -->
+            <div class="message-wrapper" id="message-3-id">
+                <div class="message message-right">
+                    <div class="message-text-data-container">
+                        <div id="message-3-id-content-wrapper">
+                            <div class="message-image-container">
+                                <img src="./img/zari.jpg" alt="">
+                            </div>
+                            <div id="message-3-id-content">
+                                Tog'ga chiqgan modniy eshshaklar.
+                            </div>
+                        </div>
+                        <div onclick="openToolTip(event)"><i class="fas fa-ellipsis-v"></i></div>
+                        <div class="tooltip">
+                            <div class="tooltip-option" onclick="editMessage('message-2-id')"><i class="fa fa-pencil"
+                                                                                                 aria-hidden="true"></i>Edit
+                            </div>
+                            <div class="tooltip-option" onclick="deleteMessage('message-2-id')"><i class="fa fa-trash"
+                                                                                                   aria-hidden="true"></i>Delete
+                            </div>
+                            <div class="tooltip-option" onclick="replyToMessage('message-2-id')"><i class="fa fa-reply"
+                                                                                                    aria-hidden="true"></i>Reply
+                            </div>
+                        </div>
+                    </div>
+                    <div class="message-text-date-container">
+                        <div class="message-time">12:34</div>
+                        <div><i class="fas fa-check-double"></i></div>
+                    </div>
+                </div>
+            </div>
+            <!-- Received message example -->
+            <div class="message-wrapper">
+                <div class="chat-avatar">
+                    <img src="./img/user-groups.png" alt="Group">
+                </div>
+                <div class="message message-left">
+                    <div class="message-sender-data">
+                        <div class="message-sender-name">Toshmat Toshmatov</div>
+                        <div><i class="fas fa-ellipsis-v"></i></div>
+                    </div>
+                    <div class="message-text-data-container">
+                        <div>Salom, qandaysiz?</div>
+                    </div>
+                    <div class="message-text-data-container">
+                        <div class="message-time">12:34</div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Sent message example -->
+            <div class="message-wrapper" id="message-1-id">
+                <div class="message message-right">
+                    <div class="message-text-data-container">
+                        <div id="message-1-id-content">Yaxshi, rahmat! Sizchi?</div>
+                        <div onclick="openToolTip(event)"><i class="fas fa-ellipsis-v"></i></div>
+                        <div class="tooltip">
+                            <div class="tooltip-option" onclick="editMessage('message-1-id')"><i class="fa fa-pencil"
+                                                                                                 aria-hidden="true"></i>Edit
+                            </div>
+                            <div class="tooltip-option" onclick="deleteMessage('message-1-id')"><i class="fa fa-trash"
+                                                                                                   aria-hidden="true"></i>Delete
+                            </div>
+                            <div class="tooltip-option" onclick="replyToMessage('message-1-id')"><i class="fa fa-reply"
+                                                                                                    aria-hidden="true"></i>Reply
+                            </div>
+                        </div>
+                    </div>
+                    <div class="message-text-data-container">
+                        <div class="message-time">12:35</div>
+                        <div><i class="fas fa-check-double"></i></div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Another received message -->
+            <div class="message-wrapper">
+                <div class="message message-left">
+                    <div class="message-sender-data">
+                        <div>Toshmat Toshmatov</div>
+                        <div><i class="fas fa-ellipsis-v"></i></div>
+                    </div>
+                    <div class="message-text-data-container">
+                        <div>Men ham yaxshi, tashakkur!</div>
+                    </div>
+                    <div class="message-text-data-container">
+                        <div class="message-time">12:36</div>
+                    </div>
+                </div>
+            </div>
+            <!-- Sent message with file -->
+            <div class="message-wrapper" id="message-2-id">
+                <div class="message message-right">
+                    <div class="reply-message-preview">Men ham yaxshi, tashakkur!</div>
+                    <div class="message-text-data-container">
+                        <div id="message-2-id-content">Jallimi?</div>
+                        <div onclick="openToolTip(event)"><i class="fas fa-ellipsis-v"></i></div>
+                        <div class="tooltip">
+                            <div class="tooltip-option" onclick="editMessage('message-2-id')"><i class="fa fa-pencil"
+                                                                                                 aria-hidden="true"></i>Edit
+                            </div>
+                            <div class="tooltip-option" onclick="deleteMessage('message-2-id')"><i class="fa fa-trash"
+                                                                                                   aria-hidden="true"></i>Delete
+                            </div>
+                            <div class="tooltip-option" onclick="replyToMessage('message-2-id')"><i class="fa fa-reply"
+                                                                                                    aria-hidden="true"></i>Reply
+                            </div>
+                        </div>
+                    </div>
+                    <div class="message-text-date-container">
+                        <div class="message-time">12:34</div>
+                        <div><i class="fas fa-check"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-input">
+            <div>
+                <input type="file" id="imageUpload"
+                       accept="image/*, application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, audio/*, video/mp4, audio/mpeg"
+                       onchange="previewImage(event)" hidden/>
+                <label for="imageUpload" class="action-button file-button" title="Attach file">📎</label>
+            </div>
+            <button class="action-button voice-button" title="Voice message">🎤</button>
+            <div class="input-wrapper">
+                <span class="input-icon display-non" id="inputMessageClearIconId" onclick="clearInput()"><i
+                        class="fa fa-times" aria-hidden="true"></i></span>
+                <input type="text" id="inputMessageId" class="input-field" placeholder="Write a message...">
+            </div>
+            <button class="send-button" onclick="sendMessage()"><i class="fa fa-paper-plane" aria-hidden="true"></i>
+            </button>
+            <!--            <button class="send-button" onclick="sendMessage()">➤</button>-->
+        </div>
+    </div>
+</div>
+
+
+<!-- Image Preview Modal -->
+<div class="modal-overlay" id="imagePreviewModalOverlayId">
+    <div class="modal" id="imagePreviewModalId">
+        <div class="modal-header" id="closeModal" onclick="closeImagePreviewModal()">✕</div>
+        <img id="imagePreviewModalImgId" src="" alt="Preview">
+        <input id="imagePreviewModalInputId" type="text" placeholder="Enter a caption...">
+        <div class="modal-buttons">
+            <button class="cancel" id="cancelButton" onclick="closeImagePreviewModal()">Cancel</button>
+            <button class="send" onclick="sendAttachMessage()">Send</button>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

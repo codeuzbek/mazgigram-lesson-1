@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MazgiGram</title>
+
+    <!-- WebSocket libraries: SockJS opens the connection, Stomp speaks the protocol -->
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.0/dist/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
+    <!-- Font Awesome provides the icons (fa-* classes) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="css/main-style.css">
+</head>
+<body>
+
+<div class="main-container">
+
+    <!-- ================================================================
+         LEFT SIDEBAR — list of chats and groups
+         ================================================================ -->
+    <div class="sidebar">
+
+        <div class="sidebar-header">
+            <div>MazgiGram</div>
+
+            <div class="display-flex position-relative">
+                <i class="padding-left-5 padding-right-5 hover-cursor fa-solid fa-gear"></i>
+            </div>
+        </div>
+
+        <div class="search-box">
+            <input type="text" class="search-input" placeholder="Search...">
+        </div>
+
+        <!-- Filled by renderChatList() in chat-main.js -->
+        <div class="chat-list" id="chatListContainerId"></div>
+    </div>
+
+
+    <!-- ================================================================
+         RIGHT SIDE — the open chat
+         ================================================================ -->
+    <div class="chat-container">
+
+        <!-- Header: name of the open chat + "is typing" indicator -->
+        <div class="chat-header">
+            <div class="display-flex gap-10">
+                <!-- Filled by showChatHeader() -->
+                <div class="chat-title" id="chatNameDivId"></div>
+
+                <!-- Shown by onUserTypingReceived() -->
+                <div id="typingIndicatorId" class="typing-indicator" style="display: none;">
+                    <span class="typing-user" id="typingUserSpanId"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
+            </div>
+            <!-- Filled by showChatHeader() -->
+            <div class="chat-status" id="chatOnlineMembersCountDivId"></div>
+        </div>
+
+        <!-- Filled by appendMessage(). Scrolling it loads more history. -->
+        <div class="chat-messages" id="chatMessageContainerId"></div>
+
+        <!-- Message input row -->
+        <div class="chat-input">
+
+            <!-- Attach a file. The input is hidden; the label is the visible button. -->
+            <div>
+                <input type="file" id="imageUpload" hidden
+                       accept="image/*, application/pdf, application/msword,
+                               application/vnd.openxmlformats-officedocument.wordprocessingml.document,
+                               audio/*, video/mp4, audio/mpeg"
+                       onchange="previewImage(event)"/>
+                <label for="imageUpload" class="action-button file-button" title="Attach file">📎</label>
+            </div>
+
+            <div class="input-wrapper">
+                <!-- The X icon appears while editing or replying; it cancels that. -->
+                <span class="input-icon display-non" id="inputMessageClearIconId" onclick="clearInput()">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </span>
+                <input type="text" id="inputMessageId" class="input-field" placeholder="Write a message...">
+            </div>
+
+            <button class="send-button" onclick="sendMessage()" title="Send">
+                <i class="fa fa-paper-plane" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<!-- ====================================================================
+     MODAL — preview of an attachment before sending it
+     ==================================================================== -->
+<div class="modal-overlay" id="imagePreviewModalOverlayId">
+    <div class="modal" id="imagePreviewModalId">
+        <div class="modal-header" onclick="closeImagePreviewModal()">✕</div>
+        <img id="imagePreviewModalImgId" src="" alt="Preview">
+        <input id="imagePreviewModalInputId" type="text" placeholder="Enter a caption...">
+        <div class="modal-buttons">
+            <button class="cancel" onclick="closeImagePreviewModal()">Cancel</button>
+            <button class="send" onclick="sendAttachMessage()">Send</button>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Loaded last so that all the elements above already exist -->
+<script src="js/chat-main.js"></script>
+
+</body>
+</html>
