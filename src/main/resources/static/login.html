@@ -16,7 +16,7 @@
     <div class="login form">
         <header>Login</header>
         <div>
-            <input type="text" id="login-email" placeholder="Enter your email" value="bigman@gmail.com">
+            <input type="text" id="login-email" placeholder="Enter your email" value="bigmangcom@gmail.com">
             <input type="password" id="login-password" placeholder="Enter your password" value="123456">
             <a href="#">Forgot password?</a>
             <input type="button" onclick="login()" class="button" value="Login">
@@ -29,12 +29,14 @@
     </div>
     <div class="registration form">
         <header>Signup</header>
-        <form action="#">
-            <input type="text" placeholder="Enter your email">
-            <input type="password" placeholder="Create a password">
-            <input type="password" placeholder="Confirm your password">
-            <input type="button" class="button" value="Signup">
-        </form>
+        <div>
+            <input type="text" id="reg-name" placeholder="Enter your name">
+            <input type="text" id="reg-surname" placeholder="Enter your surname">
+            <input type="text" id="reg-email" placeholder="Enter your email">
+            <input type="password" id="reg-password" placeholder="Create a password">
+            <input type="password" id="reg-confirm-password" placeholder="Confirm your password">
+            <input type="button" onclick="registration()" class="button" value="Signup">
+        </div>
         <div class="signup">
         <span class="signup">Already have an account?
          <label for="check">Login</label>

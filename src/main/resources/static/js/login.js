@@ -36,3 +36,57 @@ function login() {
         })
     })
 }
+
+function registration() {
+    const name = document.getElementById("reg-name").value;
+    const surname = document.getElementById("reg-surname").value;
+    const email = document.getElementById("reg-email").value;
+    const password = document.getElementById("reg-password").value;
+    const confirmPassword = document.getElementById("reg-confirm-password").value;
+
+    if (!name || !surname || !email || !password || !confirmPassword) {
+        alert("Enter all inputs")
+        return;
+    }
+
+    if (password !== confirmPassword) {
+        alert("Passwords do not match")
+        return;
+    }
+
+    const body = {
+        "name": name,
+        "surname": surname,
+        "email": email,
+        "password": password
+    }
+
+    fetch("http://localhost:8080/api/v1/auth/registration", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body)
+    }).then(response => {
+        if (response.ok) {
+            return response.json()
+        } else {
+            return Promise.reject(response.text());
+        }
+    }).then(data => {
+        alert(data.message)
+
+        document.getElementById("reg-name").value = "";
+        document.getElementById("reg-surname").value = "";
+        document.getElementById("reg-email").value = "";
+        document.getElementById("reg-password").value = "";
+        document.getElementById("reg-confirm-password").value = "";
+
+        document.getElementById("login-email").value = email;
+        document.getElementById("check").checked = false;
+    }).catch(error => {
+        error.then(errMessage => {
+            alert(errMessage)
+        })
+    })
+}
